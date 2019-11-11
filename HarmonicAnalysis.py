@@ -5,7 +5,7 @@ import itertools as itt
 
 class Constants:
     """Helps me keep track of constants and conversions,
-     originally written by Mark."""
+     originally written by Mark (b3m2a1)."""
     atomic_units = {
         "wavenumbers" : 4.55634e-6,
         "angstroms" : 1/0.529177,
@@ -15,7 +15,9 @@ class Constants:
     masses = {
         "H" : ( 1.00782503223, "amu"),
         "O" : (15.99491561957, "amu"),
-        "D" : (2.0141017778,"amu")
+        "D" : (2.0141017778,"amu"),
+        "C" : (11.9999999958,"amu"),
+        "N" : (14.003074,"amu")
     }
     @classmethod
     def convert(cls, val, unit, to_AU = True):
@@ -143,8 +145,14 @@ class HarmonicAnalysis:
         freqs, normalModes = la.eigh(hessianMW)
         freqsCM = Constants.convert(np.sqrt(freqs), 'wavenumbers', to_AU=False)
         print(freqsCM)  # should be the same as freqsCM, should have 3 negative frequencies. and 3 others close to zero.
+        xyz = ['_x','_y','_z']
+        atmOut =[]
+        for i in self.atoms:
+            for j in xyz:
+                atmOut.append(i+j)
+
         np.savetxt("frequencies.txt",freqsCM)
-        np.savetxt("normalModes.txt",normalModes)
+        np.savetxt("normalModes.txt",np.column_stack((atmOut,normalModes)),fmt='%s')
 
     def run(self):
         hessian = self.genHess()
