@@ -32,33 +32,12 @@ class Constants:
         return m
 
 class HarmonicAnalysis:
-    def __init__(self,eqGeom,atoms,dx=1.0e-3):
+    def __init__(self,eqGeom,atoms,potential,dx=1.0e-3):
         self.eqGeom = eqGeom
         self.atoms = atoms
+        self.potential = potential
         self.dx = dx
         self.nEls = 3 * len(self.atoms)
-    @staticmethod
-    def partridgePot(cds):
-        """Calls executable calc_h2o_pot, which takes in the file hoh_coord.dat and saves the energies to hoh_pot.dat
-        hoh_coord.dat has the form
-        nGeoms
-        hx hy hz
-        hx hy hz
-        ox oy oz
-        h'x h'y h'z
-        h'x h'y h'z
-        o'x o'y o'z
-        h''x h''y h''z
-        h''x h''y h''z
-        o''x o''y o''z
-        ...
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        Where nGeoms is an integer corresponding to the number of geometries you pass in
-        """
-        np.savetxt("PES0/hoh_coord.dat", cds.reshape(cds.shape[0] * cds.shape[1], cds.shape[2]), header=str(len(cds)),
-                   comments="")
-        sub.run('./calc_h2o_pot', cwd='PES0')
-        return np.loadtxt("PES0/hoh_pot.dat")-(  -1.9109019308531233E-006)
 
     def genStencil(self,dispTup,dim):
         cds = self.eqGeom
@@ -76,7 +55,7 @@ class HarmonicAnalysis:
                 dxAr[atm, cd] += disp
                 stencilCds[ct] = cds + dxAr
                 ct+=1
-            vs = self.partridgePot(stencilCds)
+            vs = self.potential(stencilCds) #Takes in an nxnAtomsx3 numpy array
             return vs
         elif dim  == 2:
             """Generates 9-point 2D stencil for finite difference"""
@@ -95,7 +74,7 @@ class HarmonicAnalysis:
                     dxAr[atm2, cd2] += disp2
                     stencilCds[ct] = cds + dxAr
                     ct += 1
-            vs = self.partridgePot(stencilCds)
+            vs = self.potential(stencilCds)
             return vs.reshape(3, 3)
 
 
@@ -158,14 +137,42 @@ class HarmonicAnalysis:
         hessian = self.genHess()
         self.diagonalize(hessian)
 
+
+def partridgePot(cds):
+    """Calls executable calc_h2o_pot, which takes in the file hoh_coord.dat and saves the energies to hoh_pot.dat
+    hoh_coord.dat has the form
+    nGeoms
+    hx hy hz
+    hx hy hz
+    ox oy oz
+    h'x h'y h'z
+    h'x h'y h'z
+    o'x o'y o'z
+    h''x h''y h''z
+    h''x h''y h''z
+    o''x o''y o''z
+    ...
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    Where nGeoms is an integer corresponding to the number of geometries you pass in
+    """
+    np.savetxt("PES0/hoh_coord.dat", cds.reshape(cds.shape[0] * cds.shape[1], cds.shape[2]), header=str(len(cds)),
+               comments="")
+    sub.run('./calc_h2o_pot', cwd='PES0')
+    return np.loadtxt("PES0/hoh_pot.dat")-(  -1.9109019308531233E-006)
+
 if __name__ == '__main__':
     dxx = 1.e-3
     """Everything is in  Atomic Units going into generating the Hessian."""
-    geom = Constants.convert(np.array(
+    geom = Constants.convert(
+        np.array(
         [[0.9578400,0.0000000,0.0000000],
         [-0.2399535,0.9272970,0.0000000],
-        [0.0000000,0.0000000,0.0000000]]
-    ),"angstroms",to_AU=True) #To Bohr from angstroms
+        [0.0000000,0.0000000,0.0000000]]),
+        "angstroms",to_AU=True) #To Bohr from angstroms
     atoms = ["H","H","O"]
-    HA_h2o = HarmonicAnalysis(eqGeom=geom,atoms=atoms,dx=dxx)
+    HA_h2o = HarmonicAnalysis(eqGeom=geom,
+                              atoms=atoms,
+                              potential=partridgePot,
+                              dx=dxx
+                              )
     HarmonicAnalysis.run(HA_h2o)
