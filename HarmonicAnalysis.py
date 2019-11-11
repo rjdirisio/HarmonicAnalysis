@@ -152,7 +152,7 @@ class HarmonicAnalysis:
 
 if __name__ == '__main__':
     dxx = 1.e-3
-    """Everything is in Atomic Units going into generating the Hessian."""
+    """Everything is in  Atomic Units going into generating the Hessian."""
     geom = Constants.convert(np.array(
         [[0.9578400,0.0000000,0.0000000],
         [-0.2399535,0.9272970,0.0000000],
