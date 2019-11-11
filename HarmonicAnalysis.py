@@ -143,6 +143,9 @@ class HarmonicAnalysis:
         freqs, normalModes = la.eigh(hessianMW)
         freqsCM = Constants.convert(np.sqrt(freqs), 'wavenumbers', to_AU=False)
         print(freqsCM)  # should be the same as freqsCM, should have 3 negative frequencies. and 3 others close to zero.
+        np.savetxt("frequencies.txt",freqsCM)
+        np.savetxt("normalModes.txt",normalModes)
+
     def run(self):
         hessian = self.genHess()
         self.diagonalize(hessian)
