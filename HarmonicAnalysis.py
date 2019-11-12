@@ -171,13 +171,10 @@ if __name__ == '__main__':
         [[0.9578400,0.0000000,0.0000000],
         [-0.2399535,0.9272970,0.0000000],
         [0.0000000,0.0000000,0.0000000],
-         [0.9578400, 0.0000000, 0.0000000],
-         [-0.2399535, 0.9272970, 0.0000000],
-         [0.0000000, 0.0000000, 0.0000000]
          ]),
 
         "angstroms",to_AU=True) #To Bohr from angstroms
-    atoms = ["H","H","O","H","H","O"]
+    atoms = ["H","H","O"]
     HA_h2o = HarmonicAnalysis(eqGeom=geom,
                               atoms=atoms,
                               potential=testPot,
