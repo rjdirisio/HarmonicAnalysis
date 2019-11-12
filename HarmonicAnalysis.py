@@ -52,10 +52,6 @@ class HarmonicAnalysis:
             ct = 0
             for disp in dxOrder:
                 dxAr = np.zeros(cds.shape)
-                # if atm == 3:
-                #     print('mahalo')
-                if cd == 3:
-                    print('bad news')
                 dxAr[atm, cd] += disp
                 stencilCds[ct] = cds + dxAr
                 ct+=1
@@ -75,8 +71,6 @@ class HarmonicAnalysis:
                 for disp2 in dxOrder:
                     dxAr = np.zeros(cds.shape)
                     dxAr[atm1, cd1] += disp
-                    if atm2 == 3:
-                        print('hi')
                     dxAr[atm2, cd2] += disp2
                     stencilCds[ct] = cds + dxAr
                     ct += 1
