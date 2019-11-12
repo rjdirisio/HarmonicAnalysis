@@ -52,6 +52,10 @@ class HarmonicAnalysis:
             ct = 0
             for disp in dxOrder:
                 dxAr = np.zeros(cds.shape)
+                # if atm == 3:
+                #     print('mahalo')
+                if cd == 3:
+                    print('bad news')
                 dxAr[atm, cd] += disp
                 stencilCds[ct] = cds + dxAr
                 ct+=1
@@ -71,6 +75,8 @@ class HarmonicAnalysis:
                 for disp2 in dxOrder:
                     dxAr = np.zeros(cds.shape)
                     dxAr[atm1, cd1] += disp
+                    if atm2 == 3:
+                        print('hi')
                     dxAr[atm2, cd2] += disp2
                     stencilCds[ct] = cds + dxAr
                     ct += 1
@@ -111,7 +117,8 @@ class HarmonicAnalysis:
         hess = hess+hess.T #hessian is symmetric matrix
 
         ###### On Diagonals #############
-        atmInfo = list(itt.product(np.arange(nAtoms), repeat=2))
+        s = [np.arange(nAtoms),np.arange(3)]
+        atmInfo = list(itt.product(*s))
         for onDiags in range(self.nEls):
             stencil1D = self.genStencil(atmInfo[onDiags],dim=1)
             hess[onDiags,onDiags]=self.finiteDiff(stencil1D,dim=1)
@@ -160,6 +167,8 @@ def partridgePot(cds):
     sub.run('./calc_h2o_pot', cwd='PES0')
     return np.loadtxt("PES0/hoh_pot.dat")-(  -1.9109019308531233E-006)
 
+def testPot(cds):
+    return np.repeat(0,len(cds))
 if __name__ == '__main__':
     dxx = 1.e-3
     """Everything is in  Atomic Units going into generating the Hessian."""
@@ -167,12 +176,17 @@ if __name__ == '__main__':
         np.array(
         [[0.9578400,0.0000000,0.0000000],
         [-0.2399535,0.9272970,0.0000000],
-        [0.0000000,0.0000000,0.0000000]]),
+        [0.0000000,0.0000000,0.0000000],
+         [0.9578400, 0.0000000, 0.0000000],
+         [-0.2399535, 0.9272970, 0.0000000],
+         [0.0000000, 0.0000000, 0.0000000]
+         ]),
+
         "angstroms",to_AU=True) #To Bohr from angstroms
-    atoms = ["H","H","O"]
+    atoms = ["H","H","O","H","H","O"]
     HA_h2o = HarmonicAnalysis(eqGeom=geom,
                               atoms=atoms,
-                              potential=partridgePot,
+                              potential=testPot,
                               dx=dxx
                               )
     HarmonicAnalysis.run(HA_h2o)
