@@ -2,34 +2,7 @@ import numpy as np
 import numpy.linalg as la
 import subprocess as sub
 import itertools as itt
-
-class Constants:
-    """Helps me keep track of constants and conversions,
-     originally written by Mark (b3m2a1)."""
-    atomic_units = {
-        "wavenumbers" : 4.55634e-6,
-        "angstroms" : 1/0.529177,
-        "amu" : 1.000000000000000000/6.02213670000e23/9.10938970000e-28   #1822.88839  g/mol -> a.u.
-    }
-
-    masses = {
-        "H" : ( 1.00782503223, "amu"),
-        "O" : (15.99491561957, "amu"),
-        "D" : (2.0141017778,"amu"),
-        "C" : (11.9999999958,"amu"),
-        "N" : (14.003074,"amu")
-    }
-    @classmethod
-    def convert(cls, val, unit, to_AU = True):
-        vv = cls.atomic_units[unit]
-        return (val * vv) if to_AU else (val / vv)
-
-    @classmethod
-    def mass(cls, atom, to_AU = True):
-        m = cls.masses[atom]
-        if to_AU:
-            m = cls.convert(*m)
-        return m
+from ..researchUtils import Constants
 
 class HarmonicAnalysis:
     def __init__(self,eqGeom,atoms,potential,dx=1.0e-3):
@@ -163,6 +136,7 @@ def partridgePot(cds):
 
 def testPot(cds):
     return np.repeat(0,len(cds))
+
 if __name__ == '__main__':
     dxx = 1.e-3
     """Everything is in  Atomic Units going into generating the Hessian."""
@@ -177,7 +151,7 @@ if __name__ == '__main__':
     atoms = ["H","H","O"]
     HA_h2o = HarmonicAnalysis(eqGeom=geom,
                               atoms=atoms,
-                              potential=testPot,
+                              potential=partridgePot,
                               dx=dxx
                               )
     HarmonicAnalysis.run(HA_h2o)
