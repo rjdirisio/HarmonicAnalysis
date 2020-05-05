@@ -112,46 +112,46 @@ class HarmonicAnalysis:
         self.diagonalize(hessian)
 
 
-def partridgePot(cds):
-    """Calls executable calc_h2o_pot, which takes in the file hoh_coord.dat and saves the energies to hoh_pot.dat
-    hoh_coord.dat has the form
-    nGeoms
-    hx hy hz
-    hx hy hz
-    ox oy oz
-    h'x h'y h'z
-    h'x h'y h'z
-    o'x o'y o'z
-    h''x h''y h''z
-    h''x h''y h''z
-    o''x o''y o''z
-    ...
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Where nGeoms is an integer corresponding to the number of geometries you pass in
-    """
-    np.savetxt("PES0/hoh_coord.dat", cds.reshape(cds.shape[0] * cds.shape[1], cds.shape[2]), header=str(len(cds)),
-               comments="")
-    sub.run('./calc_h2o_pot', cwd='PES0')
-    return np.loadtxt("PES0/hoh_pot.dat")-(  -1.9109019308531233E-006)
+# def partridgePot(cds):
+    # """Calls executable calc_h2o_pot, which takes in the file hoh_coord.dat and saves the energies to hoh_pot.dat
+    # hoh_coord.dat has the form
+    # nGeoms
+    # hx hy hz
+    # hx hy hz
+    # ox oy oz
+    # h'x h'y h'z
+    # h'x h'y h'z
+    # o'x o'y o'z
+    # h''x h''y h''z
+    # h''x h''y h''z
+    # o''x o''y o''z
+    # ...
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # Where nGeoms is an integer corresponding to the number of geometries you pass in
+    # """
+    # np.savetxt("PES0/hoh_coord.dat", cds.reshape(cds.shape[0] * cds.shape[1], cds.shape[2]), header=str(len(cds)),
+               # comments="")
+    # sub.run('./calc_h2o_pot', cwd='PES0')
+    # return np.loadtxt("PES0/hoh_pot.dat")-(  -1.9109019308531233E-006)
 
-def testPot(cds):
-    return np.repeat(0,len(cds))
+# def testPot(cds):
+    # return np.repeat(0,len(cds))
 
-if __name__ == '__main__':
-    dxx = 1.e-3
-    """Everything is in  Atomic Units going into generating the Hessian."""
-    geom = Constants.convert(
-        np.array(
-        [[0.9578400,0.0000000,0.0000000],
-        [-0.2399535,0.9272970,0.0000000],
-        [0.0000000,0.0000000,0.0000000],
-         ]),
+# if __name__ == '__main__':
+    # dxx = 1.e-3
+    # """Everything is in  Atomic Units going into generating the Hessian."""
+    # geom = Constants.convert(
+        # np.array(
+        # [[0.9578400,0.0000000,0.0000000],
+        # [-0.2399535,0.9272970,0.0000000],
+        # [0.0000000,0.0000000,0.0000000],
+         # ]),
 
-        "angstroms",to_AU=True) #To Bohr from angstroms
-    atoms = ["H","H","O"]
-    HA_h2o = HarmonicAnalysis(eqGeom=geom,
-                              atoms=atoms,
-                              potential=partridgePot,
-                              dx=dxx
-                              )
-    HarmonicAnalysis.run(HA_h2o)
+        # "angstroms",to_AU=True) #To Bohr from angstroms
+    # atoms = ["H","H","O"]
+    # HA_h2o = HarmonicAnalysis(eqGeom=geom,
+                              # atoms=atoms,
+                              # potential=partridgePot,
+                              # dx=dxx
+                              # )
+    # HarmonicAnalysis.run(HA_h2o)
