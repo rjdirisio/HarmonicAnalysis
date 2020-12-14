@@ -10,7 +10,7 @@ After, you may run
 
 In order to install the package, which can then be used in an `import`
 
-##Description
+## Description
 
 This Harmonic Analysis code generates a Hessian Matrix, Mass-weights it, and then diagonalizes it to obtain 
 harmonic frequencies and mass-weighted eigenvectors (vibrational normal modes).
