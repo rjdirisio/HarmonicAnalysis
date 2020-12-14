@@ -4,10 +4,10 @@ import itertools as itt
 
 from pyvibdmc.simulation_utilities import Constants
 from pyvibdmc.simulation_utilities import potential_manager as pm
-from finite_difference import MolFiniteDifference as MolFD
+from .finite_difference import MolFiniteDifference as MolFD
 
 
-class HarmonicAnalysis:
+class harmonic_analysis:
     def __init__(self,
                  eq_geom,
                  atoms,
@@ -99,7 +99,7 @@ if __name__ == '__main__':
                            [-0.2399535, 0.9272970, 0.0000000],
                            [0.0000000, 0.0000000, 0.0000000]])
     # Everything is in  Atomic Units going into generating the Hessian.
-    pot_dir = '../Potentials/Partridge_Schwenke_H2O/'
+    pot_dir = '../../Potentials/Partridge_Schwenke_H2O/'
     py_file = 'h2o_potential.py'
     pot_func = 'water_pot'
     partridge_schwenke = pm.Potential(potential_function=pot_func,
@@ -109,11 +109,11 @@ if __name__ == '__main__':
     geom = Constants.convert(water_geom, "angstroms", to_AU=True)  # To Bohr from angstroms
     atms = ["H", "H", "O"]
 
-    HA_h2o = HarmonicAnalysis(eq_geom=geom,
+    HA_h2o = harmonic_analysis(eq_geom=geom,
                               atoms=atms,
                               potential=partridge_schwenke,
                               dx=dxx)
-    freqs, normal_modes = HarmonicAnalysis.run(HA_h2o)
+    freqs, normal_modes = harmonic_analysis.run(HA_h2o)
     # Turns of scientific notation
     np.set_printoptions(suppress=True)
     print(f"Freqs (cm-1): {freqs}")

@@ -1,5 +1,16 @@
 # HarmonicAnalysis
-Python code to do harmonic analysis of arbitrary molecules
+Minimal Python package to do harmonic vibrational normal mode analysis of arbitrary molecules
+
+## Installation
+
+To install the package, `git clone` the directory from GitHub, then `cd` into the directory.
+After, you may run
+
+`pip install .`
+
+In order to install the package, which can then be used in an `import`
+
+##Description
 
 This Harmonic Analysis code generates a Hessian Matrix, Mass-weights it, and then diagonalizes it to obtain 
 harmonic frequencies and mass-weighted eigenvectors (vibrational normal modes).
