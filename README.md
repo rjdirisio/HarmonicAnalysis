@@ -1,5 +1,5 @@
 # HarmonicAnalysis
-Minimal Python package to do harmonic vibrational normal mode analysis of arbitrary molecules
+Minimal Python package to perform a Cartesian vibrational normal mode analysis of arbitrary molecules
 
 ## Installation
 
